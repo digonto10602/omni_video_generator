@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="Main.qml">Main.qml</file>
+        <file alias="GeneratePage.qml">GeneratePage.qml</file>
+        <file alias="ProjectsPage.qml">ProjectsPage.qml</file>
+        <file alias="GalleryPage.qml">GalleryPage.qml</file>
+        <file alias="HelpOverlay.qml">HelpOverlay.qml</file>
+        <file alias="i18n/en.json">i18n/en.json</file>
+        <file alias="templates/t2v.json">../templates/t2v.json</file>
+        <file alias="templates/i2v.json">../templates/i2v.json</file>
+        <file alias="templates/r2v.json">../templates/r2v.json</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="templates/t2v.json">../templates/t2v.json</file>
+        <file alias="templates/i2v.json">../templates/i2v.json</file>
+        <file alias="templates/r2v.json">../templates/r2v.json</file>
+    </qresource>
+</RCC>

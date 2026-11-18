@@ -1,0 +1,41 @@
+# Third-party ComfyUI tree with ~64 GB of model weights (copied in, never committed)
+/comfyui/
+# The user's private creative work from earlier projects
+/reference/
+# Python environment, caches, scratch
+/.venv/
+/.cache/
+/.tmp/
+/.comfy-user/
+# Generated media and user projects
+/output/
+/input/
+/projects/
+# Build products
+/build/
+/pkgbuild/pkg/
+/pkgbuild/src/
+*.pkg.tar.*
+# Never commit media or model files
+*.mp4
+*.mkv
+*.webm
+*.mov
+*.wav
+*.flac
+*.mp3
+*.ogg
+*.opus
+*.m4a
+*.aac
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.safetensors
+*.gguf
+*.ckpt
+*.pt
+*.pth
+*.bin
+!/pkgbuild/*.svg
