@@ -5,6 +5,7 @@
         <file alias="ProjectsPage.qml">ProjectsPage.qml</file>
         <file alias="GalleryPage.qml">GalleryPage.qml</file>
         <file alias="HelpOverlay.qml">HelpOverlay.qml</file>
+        <file alias="AccentButton.qml">AccentButton.qml</file>
         <file alias="i18n/en.json">i18n/en.json</file>
         <file alias="templates/t2v.json">../templates/t2v.json</file>
         <file alias="templates/i2v.json">../templates/i2v.json</file>

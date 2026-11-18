@@ -229,7 +229,7 @@ int findFreePort(int first, int last) {
 QStringList launchArguments(const AppPaths &paths, int port) {
     return {"main.py",
             "--listen", "127.0.0.1", "--port", QString::number(port),
-            // Proven on this RTX 3070 with 31 GB RAM (hellfire start_comfyui.sh):
+            // Proven on this RTX 3070 with 31 GB RAM (an earlier local project's start_comfyui.sh):
             // the ~42 GB of weights exceed RAM, so stream them from NVMe and
             // never pin RAM; keep 1 GB of VRAM for the desktop.
             "--reserve-vram", "1.0", "--disable-pinned-memory", "--fast-disk",

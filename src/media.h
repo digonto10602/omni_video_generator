@@ -19,7 +19,7 @@ struct ProbeResult {
 ProbeResult probe(const QString &file);
 bool toolsAvailable(QString *missing = nullptr);
 bool extractFrame(const QString &video, double seconds, const QString &png, QString *error = nullptr);
-// Start / middle / end frames side by side (like hellfire contact_sheets.sh).
+// Start / middle / end frames side by side (like the earlier contact_sheets.sh).
 bool contactSheet(const QString &video, const QString &png, QString *error = nullptr);
 // Several sheets stacked into one image, each scaled to `width`.
 bool stackImages(const QStringList &pngs, const QString &out, int width, QString *error = nullptr);

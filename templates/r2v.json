@@ -1,6 +1,6 @@
 {
  "_meta": {
-  "description": "Reference to video (ref2va). Up to 9 reference images named <Picture 1>..<Picture 9> in the prompt. Identical to the proven hellfire h3_api.py graph.",
+  "description": "Reference to video (ref2va). Up to 9 reference images named <Picture 1>..<Picture 9> in the prompt. Identical to the h3_api.py graph proven in an earlier local project.",
   "max_refs": 9,
   "min_refs": 0,
   "ref_input": "ref_images.ref_image_{i}",

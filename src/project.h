@@ -8,7 +8,7 @@
 
 #include "h3.h"
 
-// A multi-shot project, like the hellfire workflow: projects/<NAME>/shots.json
+// A multi-shot project, like the earlier proven workflow: projects/<NAME>/shots.json
 // lists the shots; clips/ holds the rendered shots; video_N.mp4 and
 // video_N_manifest.json are the stitched results; contact/ holds frame grids.
 struct ShotSpec {

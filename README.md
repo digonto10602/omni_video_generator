@@ -57,7 +57,28 @@ RTX 3070 with 8 GiB VRAM, 31 GiB RAM, ComfyUI 0.31.0, torch 2.13.0+cu130.
 "VRAM peak" is the whole card from `nvidia-smi`, sampled every 2 s, and
 includes about 1.4 GiB used by the desktop.
 
-MEASUREMENTS_TABLE
+| Job | Frames | Steps | Sampling | Queue to file | VRAM peak (card) |
+|---|---|---|---|---|---|
+| t2v 608 x 352, 2 s | 56 (2.33 s) | 10 | 31 s (3.5 s/step) | 51 s | 7609 MiB |
+| i2v 608 x 352, 2 s (project shot) | 56 | 10 | 31 s | 51 s | 7577 MiB |
+| r2v 608 x 352, 2 s (project shot) | 56 | 10 | 32 s | 52 s | 7547 MiB |
+| t2v 1344 x 768, 2 s | 56 | 4 | 59 s (19.6 s/step) | 115 s | 7095 MiB |
+
+Starting ComfyUI takes 5 to 10 s. Each job also has fixed overhead of about
+20 s (model staging, video and audio decode). Earlier runs of the same setup
+on this card: 352 x 608 at 73 frames and 20 steps took about 2 minutes,
+124 frames about 3 minutes; 1344 x 768 at 124 frames took about 27 minutes.
+
+**Largest practical size on 8 GB:** 1344 x 768 (or 768 x 1344), which is H3's
+native canvas cap of 768 x 1344 pixels. It fits because ComfyUI streams the
+~20 GB model from disk ("dynamic VRAM"); the card peaks around 7.1 GiB. It is
+slow: about 20 s per step at 2 s of video, so roughly 7 minutes at 20 steps,
+and about 27 minutes for 5 s. Length: the model is trained on 124 to 362
+frames (5 to 15 s); 243 frames (10 s) at 352 x 608 has been rendered on this
+card. Practical rule: draft at 608 x 352 or 352 x 608 with 20 steps, then
+render finals at 1344 x 768 for up to about 5 s per shot. Fewer than about 15
+steps gives visibly unfinished pictures (at 4 steps the 1344 x 768 test was
+striped and noisy).
 
 ## Projects (multi-shot videos)
 

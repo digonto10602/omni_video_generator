@@ -71,7 +71,7 @@ Item {
             Flow {
                 Layout.fillWidth: true
                 spacing: 8
-                Button { text: qsTr("Render all  (Space)"); highlighted: true; enabled: !backend.busy; onClicked: page.renderAll() }
+                AccentButton { text: qsTr("Render all  (Space)"); enabled: !backend.busy; onClicked: page.renderAll() }
                 Button { text: qsTr("Stitch  (S)"); enabled: !backend.busy; onClicked: backend.stitchProject(page.current) }
                 Button { text: qsTr("Contact sheets  (G)"); enabled: !backend.busy; onClicked: backend.contactSheets(page.current) }
                 Button { text: qsTr("Edit shots.json"); onClicked: backend.openPath(backend.project.shots_file) }

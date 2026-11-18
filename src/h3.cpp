@@ -49,7 +49,7 @@ bool parseMode(const QString &name, Mode *mode) {
 }
 
 QList<Preset> presets() {
-    // 608x352 / 352x608 are the fast drafts proven by the hellfire project;
+    // 608x352 / 352x608 are the fast drafts proven by an earlier local project;
     // 1344x768 is H3's native canvas cap and was run on this 8 GB card.
     return {
         {"608 x 352  draft 16:9", 608, 352},

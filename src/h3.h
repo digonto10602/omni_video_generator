@@ -5,7 +5,7 @@
 #include <QStringList>
 
 // MiniMax H3 rules, taken from ComfyUI's comfy_extras/nodes_minimax_h3.py and
-// the proven hellfire h3_api.py graph.
+// the h3_api.py graph proven in an earlier local project.
 namespace H3 {
 constexpr int Fps = 24;
 constexpr int SizeMultiple = 32;

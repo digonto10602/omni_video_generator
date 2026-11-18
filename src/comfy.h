@@ -52,7 +52,7 @@ struct ComfyStatus {
 
 namespace ComfyServer {
 ComfyStatus detect(const AppPaths &paths);
-// The proven 8 GB launch command (hellfire start_comfyui.sh) plus local-only,
+// The proven 8 GB launch command (an earlier local project's start_comfyui.sh) plus local-only,
 // no-cloud and in-project folders.
 QStringList launchArguments(const AppPaths &paths, int port);
 // Missing pieces (ComfyUI code, Python env, model files) as readable lines.

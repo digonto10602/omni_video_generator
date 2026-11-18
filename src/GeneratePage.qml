@@ -208,9 +208,8 @@ Item {
 
             RowLayout {
                 Layout.leftMargin: 20; Layout.rightMargin: 20
-                Button {
+                AccentButton {
                     text: backend.busy ? qsTr("Working…") : qsTr("Generate  (Space)")
-                    highlighted: true
                     enabled: !backend.busy && prompt.text.trim() !== "" && page.refsOk
                     onClicked: page.generate()
                 }
@@ -227,7 +226,7 @@ Item {
                 Layout.fillWidth: true
                 font.pixelSize: 12
                 color: "#8a8a94"
-                text: qsTr("On this 8 GB card a 608 × 352, 3 s clip at 20 steps takes about 2 minutes; 1344 × 768, 5 s takes about 27 minutes.")
+                text: qsTr("On this 8 GB card a 608 × 352, 3 s clip at 20 steps takes about 2 minutes; 1344 × 768 takes about 20 s per step for 2 s and about 27 minutes for 5 s.")
                 wrapMode: Text.Wrap
             }
 
