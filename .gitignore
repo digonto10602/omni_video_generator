@@ -39,3 +39,4 @@
 *.pth
 *.bin
 !/pkgbuild/*.svg
+!/docs/*.png
