@@ -357,18 +357,31 @@ bool stop(const AppPaths &paths, QString *error) {
     return true;
 }
 
-void waitForVramRelease(ComfyClient &client, int timeoutMs) {
+int processVramMiB(qint64 pid) {
+    QProcess p;
+    p.start("nvidia-smi", {"--query-compute-apps=pid,used_memory", "--format=csv,noheader,nounits"});
+    if (!p.waitForFinished(5000) || p.exitCode() != 0) return -1;
+    for (const QString &line : QString::fromUtf8(p.readAllStandardOutput()).split('\n')) {
+        const QStringList f = line.split(',');
+        if (f.size() == 2 && f[0].trimmed().toLongLong() == pid) return f[1].trimmed().toInt();
+    }
+    return 0;
+}
+
+int waitForVramRelease(qint64 pid, int thresholdMiB, int timeoutMs) {
+    // ComfyUI's /free unloads the models, but its dynamic-VRAM pool can stay
+    // allocated in the process; measure the process itself, not PyTorch's
+    // counters (which read near zero under cudaMallocAsync).
     QElapsedTimer t;
     t.start();
-    while (t.elapsed() < timeoutMs) {
-        const QJsonArray devices = client.systemStats().value("devices").toArray();
-        if (devices.isEmpty()) return;
-        const double reserved = devices.first().toObject().value("torch_vram_total").toDouble();
-        if (reserved < 512.0 * 1048576) return;
+    int held = processVramMiB(pid);
+    while (held > thresholdMiB && t.elapsed() < timeoutMs) {
         QEventLoop loop;
         QTimer::singleShot(1000, &loop, &QEventLoop::quit);
         loop.exec();
+        held = processVramMiB(pid);
     }
+    return held;
 }
 
 }  // namespace ComfyServer

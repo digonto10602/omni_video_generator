@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Omni Video Generator
+Comment=Generate videos locally with MiniMax H3 through ComfyUI
+Exec=omni-video-generator open
+Icon=omni-video-generator
+Terminal=false
+Categories=AudioVideo;Video;Graphics;
+StartupWMClass=omni-video-generator

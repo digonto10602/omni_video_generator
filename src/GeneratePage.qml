@@ -42,20 +42,20 @@ Item {
 
             Item { Layout.preferredHeight: 4 }
 
-            RowLayout {
-                Layout.leftMargin: 20; Layout.rightMargin: 20
-                spacing: 8
-                Repeater {
-                    model: [["t2v", qsTr("Text to video")], ["i2v", qsTr("Image to video")], ["r2v", qsTr("Reference to video")]]
-                    Button {
-                        text: modelData[1]
-                        checkable: true
-                        checked: page.mode === modelData[0]
-                        highlighted: checked
-                        onClicked: { page.mode = modelData[0]; if (page.mode === "t2v") page.refs = []; else if (page.mode === "i2v") page.refs = page.refs.slice(0, 1) }
-                    }
+            TabBar {
+                id: modeBar
+                Layout.leftMargin: 20
+                Layout.preferredWidth: 560
+                readonly property var modes: ["t2v", "i2v", "r2v"]
+                currentIndex: modes.indexOf(page.mode)
+                onCurrentIndexChanged: {
+                    page.mode = modes[currentIndex]
+                    if (page.mode === "t2v") page.refs = []
+                    else if (page.mode === "i2v") page.refs = page.refs.slice(0, 1)
                 }
-                Item { Layout.fillWidth: true }
+                TabButton { text: qsTr("Text to video") }
+                TabButton { text: qsTr("Image to video") }
+                TabButton { text: qsTr("Reference to video") }
             }
 
             Label {
@@ -70,6 +70,7 @@ Item {
 
             TextArea {
                 id: prompt
+                objectName: "promptField"
                 Layout.leftMargin: 20; Layout.rightMargin: 20
                 Layout.fillWidth: true
                 Layout.preferredHeight: 150

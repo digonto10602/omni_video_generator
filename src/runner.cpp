@@ -16,7 +16,7 @@ QJsonObject Runner::Result::toJson() const {
     return {{"ok", ok}, {"error", error}, {"file", file}, {"prompt_id", promptId},
             {"seconds", seconds}, {"sampling_seconds", samplingSeconds},
             {"vram_peak_mib", vramPeakMiB}, {"vram_baseline_mib", vramBaselineMiB},
-            {"template", templateSource}};
+            {"template", templateSource}, {"comfyui_version", comfyVersion}};
 }
 
 Runner::Runner(const AppPaths &paths, EventFn onEvent, QObject *parent)
@@ -252,6 +252,7 @@ Runner::Result Runner::run(const Job &job) {
         return r;
     }
     r.file = job.destFile;
+    r.comfyVersion = m_status.version;
     r.seconds = total.elapsed() / 1000.0;
     r.ok = true;
     emitEvent({{"event", "done"}, {"result", r.toJson()}});
@@ -262,12 +263,25 @@ void Runner::end(bool keepComfy) {
     if (m_client && m_status.running) {
         // Unload the model so the VRAM is free for other apps.
         m_client->freeMemory();
-        ComfyServer::waitForVramRelease(*m_client);
-        emitEvent({{"event", "models_unloaded"}});
-        if (m_startedComfy && !keepComfy) {
-            QString err;
-            ComfyServer::stop(m_paths, &err);
-            emitEvent({{"event", "comfy_stopped"}});
+        if (m_status.ours) {
+            const int held = ComfyServer::waitForVramRelease(m_status.pid);
+            emitEvent({{"event", "models_unloaded"}, {"comfy_vram_mib", held}});
+            // The GPU lock must not be released while ComfyUI still sits on
+            // gigabytes of VRAM, so a server that keeps its pool is stopped
+            // even when asked to stay warm.
+            const bool stillHolding = held > 1024;
+            if (m_startedComfy || stillHolding) {
+                if (!keepComfy || stillHolding) {
+                    if (stillHolding && keepComfy)
+                        emitEvent({{"event", "log"}, {"message", QString("ComfyUI still held %1 MiB after unloading; stopping it to release the GPU").arg(held)}});
+                    QString err;
+                    ComfyServer::stop(m_paths, &err);
+                    emitEvent({{"event", "comfy_stopped"}, {"error", err}});
+                }
+            }
+        } else {
+            emitEvent({{"event", "models_unloaded"}});
+            emitEvent({{"event", "log"}, {"message", "ComfyUI was started elsewhere; asked it to unload but cannot stop it"}});
         }
     }
     m_ws.close();

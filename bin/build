@@ -6,6 +6,9 @@ mkdir -p "$ROOT/build"
 cd "$ROOT/build"
 
 qmake6 "$ROOT/omni-video-generator.pro"
+# The git commit is a compile-time define; make does not notice when it
+# changes, so always recompile the one file that uses it.
+rm -f paths.o
 make -j"$(nproc)"
 
 echo "Built $ROOT/build/omni-video-generator"

@@ -8,8 +8,8 @@ TEMPLATE = app
 # that produced a video.
 GIT_COMMIT = $$system(git -C $$PWD rev-parse --short HEAD 2>/dev/null)
 isEmpty(GIT_COMMIT): GIT_COMMIT = unknown
-GIT_DIRTY = $$system(git -C $$PWD status --porcelain --untracked-files=no 2>/dev/null | head -c1)
-!isEmpty(GIT_DIRTY): GIT_COMMIT = $${GIT_COMMIT}-dirty
+GIT_DIRTY = $$system(git -C $$PWD status --porcelain --untracked-files=no 2>/dev/null | wc -l)
+!equals(GIT_DIRTY, 0): GIT_COMMIT = $${GIT_COMMIT}-dirty
 DEFINES += APP_GIT_COMMIT=\\\"$$GIT_COMMIT\\\" APP_VERSION=\\\"0.1.0\\\"
 
 include(src/core.pri)

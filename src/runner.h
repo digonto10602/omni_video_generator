@@ -28,7 +28,7 @@ public:
     };
     struct Result {
         bool ok = false;
-        QString error, file, promptId, templateSource;
+        QString error, file, promptId, templateSource, comfyVersion;
         double seconds = 0;          // queue to file on disk
         double samplingSeconds = 0;
         int vramPeakMiB = 0;         // whole card, from nvidia-smi

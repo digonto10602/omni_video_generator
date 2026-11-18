@@ -134,7 +134,7 @@ Runner::EventFn eventPrinter() {
             err << QString("shot %1 (%2 of %3)%4\n").arg(e.value("shot").toInt()).arg(e.value("index").toInt())
                        .arg(e.value("count").toInt())
                        .arg(e.contains("eta_seconds") ? "  project ETA " + fmtDuration(e.value("eta_seconds").toDouble()) : QString());
-        else if (ev == "models_unloaded") err << "models unloaded from VRAM\n";
+        else if (ev == "models_unloaded") err << "models unloaded" << (e.contains("comfy_vram_mib") ? QString(" (ComfyUI process still holds %1 MiB)").arg(e.value("comfy_vram_mib").toInt()) : QString()) << "\n";
         else if (ev == "comfy_stopped") err << "ComfyUI stopped\n";
         err.flush();
     };
@@ -430,7 +430,10 @@ int cmdProjectStitch(const AppPaths &paths, const ProjectSpec &spec, const Optio
         return fail(final + " appeared while stitching; not overwriting");
     }
 
-    ComfyStatus cs = ComfyServer::detect(paths);
+    // ComfyUI is usually stopped by now; its version was recorded per shot.
+    QString comfyVersion;
+    for (const auto &v : state.value("shots").toObject())
+        if (comfyVersion.isEmpty()) comfyVersion = v.toObject().value("render").toObject().value("comfyui_version").toString();
     QJsonArray clipEntries;
     double start = 0;
     for (int i = 0; i < spec.shots.size(); ++i) {
@@ -458,9 +461,9 @@ int cmdProjectStitch(const AppPaths &paths, const ProjectSpec &spec, const Optio
         {"output", fp.toJson()},
         {"settings", QJsonObject{{"width", spec.width}, {"height", spec.height}, {"fps", H3::Fps}, {"steps", spec.steps},
                                  {"audio", spec.audio}, {"style", spec.style}}},
-        {"workflow", QJsonObject{{"engine", "ComfyUI (local)"}, {"comfyui_version", cs.version},
+        {"workflow", QJsonObject{{"engine", "ComfyUI (local)"}, {"comfyui_version", comfyVersion},
                                  {"sampler", "res_multistep"}, {"templates_dir", paths.templatesDir},
-                                 {"launch_flags", QJsonArray::fromStringList(ComfyServer::launchArguments(paths, cs.port ? cs.port : 8188))}}},
+                                 {"launch_flags", QJsonArray::fromStringList(ComfyServer::launchArguments(paths, 8188))}}},
         {"stitch", QJsonObject{{"ffmpeg_args", QJsonArray::fromStringList(Media::stitchArguments(clips, spec.width, spec.height, spec.audio, final, comment))}}},
         {"app", QJsonObject{{"name", "omni-video-generator"}, {"version", appVersion()}, {"git_commit", appGitCommit()}}},
         {"licence", "MiniMax H3 Community License Agreement (https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE). AI-generated content."},

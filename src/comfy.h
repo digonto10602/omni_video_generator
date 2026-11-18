@@ -60,6 +60,9 @@ QStringList checkInstall(const AppPaths &paths);
 ComfyStatus start(const AppPaths &paths, QString *error, const std::function<void(const QString &)> &log = {});
 bool stop(const AppPaths &paths, QString *error = nullptr);
 int findFreePort(int first = 8188, int last = 8199);
-// Polls until the server's PyTorch reservation drops (models unloaded) or the timeout passes.
-void waitForVramRelease(ComfyClient &client, int timeoutMs = 20000);
+// VRAM held by one process, from nvidia-smi (MiB; 0 if none, -1 if unknown).
+int processVramMiB(qint64 pid);
+// After /free, polls until the process holds at most `thresholdMiB` or the
+// timeout passes; returns what it still holds.
+int waitForVramRelease(qint64 pid, int thresholdMiB = 1024, int timeoutMs = 10000);
 }
