@@ -130,6 +130,10 @@ Runner::Result Runner::run(const Job &job) {
         r.error = "runner not started";
         return r;
     }
+    if (m_cancelled) {
+        r.error = "cancelled";
+        return r;
+    }
     H3::GenParams params = job.params;
     WorkflowBuilder builder(m_paths.templatesDir);
     builder.loadTemplate(params.mode, &r.templateSource);
